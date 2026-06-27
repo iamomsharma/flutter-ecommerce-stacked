@@ -18,20 +18,21 @@ class SearchView extends StackedView<SearchViewModel> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search, size: 90, color: Colors.grey),
+            Icon(Icons.manage_search, size: 90, color: Colors.grey),
 
             SizedBox(height: 16),
 
             Text(
-              "Search Products",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              "Coming Soon",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             SizedBox(height: 8),
 
             Text(
-              "Search feature is available on Home Screen.",
-              style: TextStyle(color: Colors.grey),
+              "We're working on the search feature.\nStay tuned for upcoming updates!",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey, fontSize: 15),
             ),
           ],
         ),

@@ -33,29 +33,42 @@ class SignupViewModel extends BaseViewModel {
     final confirmPassword = confirmPasswordController.text.trim();
 
     if (email.isEmpty) {
-      _snackbarService.showSnackbar(message: "Please enter email");
+      _snackbarService.showSnackbar(
+        message: "Please enter email",
+        duration: const Duration(seconds: 1),
+      );
       return;
     }
 
     if (!email.contains("@")) {
-      _snackbarService.showSnackbar(message: "Please enter valid email");
+      _snackbarService.showSnackbar(
+        message: "Please enter valid email",
+        duration: const Duration(seconds: 1),
+      );
       return;
     }
 
     if (password.isEmpty) {
-      _snackbarService.showSnackbar(message: "Please enter password");
+      _snackbarService.showSnackbar(
+        message: "Please enter password",
+        duration: const Duration(seconds: 1),
+      );
       return;
     }
 
     if (password.length < 6) {
       _snackbarService.showSnackbar(
         message: "Password must be at least 6 characters",
+        duration: const Duration(seconds: 1),
       );
       return;
     }
 
     if (password != confirmPassword) {
-      _snackbarService.showSnackbar(message: "Passwords do not match");
+      _snackbarService.showSnackbar(
+        message: "Passwords do not match",
+        duration: const Duration(seconds: 1),
+      );
       return;
     }
 
@@ -64,12 +77,24 @@ class SignupViewModel extends BaseViewModel {
 
       await _authService.signUp(email, password);
 
-      _snackbarService.showSnackbar(message: "Account created successfully");
+      _snackbarService.showSnackbar(
+        message: "Account created successfully",
+        duration: const Duration(seconds: 1),
+      );
 
       _navigationService.replaceWithDashboardView();
     } on FirebaseAuthException catch (e) {
+      if (e.code == 'network-request-failed') {
+        _snackbarService.showSnackbar(
+          message: "No internet connection",
+          duration: const Duration(seconds: 1),
+        );
+        return;
+      }
+
       _snackbarService.showSnackbar(
-        message: e.message ?? "Registration Failed",
+        message: e.message ?? "Login Failed",
+        duration: const Duration(seconds: 1),
       );
     } finally {
       setBusy(false);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myshop/ui/common/app_colors.dart';
 import 'package:myshop/ui/views/startup/startup_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 
@@ -16,7 +17,9 @@ class StartupView extends StackedView<StartupViewModel> {
     StartupViewModel viewModel,
     Widget? child,
   ) {
-    return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    return const Scaffold(
+      body: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+    );
   }
 
   @override

@@ -3,6 +3,7 @@ import 'package:myshop/app/app.locator.dart';
 import 'package:myshop/app/app.router.dart';
 import 'package:myshop/models/product_model.dart';
 import 'package:myshop/services/api_service.dart';
+import 'package:myshop/services/hive_service.dart';
 import 'package:myshop/services/wishlist_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -11,6 +12,7 @@ class HomeViewModel extends BaseViewModel {
   final _apiService = locator<ApiService>();
   final _navigationService = locator<NavigationService>();
   final _wishlistService = locator<WishlistService>();
+  final _hiveService = locator<HiveService>();
 
   List<ProductModel> products = [];
   List<ProductModel> filteredProducts = [];
@@ -20,19 +22,23 @@ class HomeViewModel extends BaseViewModel {
   final searchController = TextEditingController();
 
   Future<void> getProducts() async {
-    try {
-      setBusy(true);
+    setBusy(true);
 
+    try {
       products = await _apiService.getProducts();
 
       filteredProducts = List.from(products);
 
-      notifyListeners();
+      /// Save in Hive
+      await _hiveService.saveProducts(products);
     } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      setBusy(false);
+      /// Read From Hive
+      products = _hiveService.getProducts();
+
+      filteredProducts = List.from(products);
     }
+
+    setBusy(false);
   }
 
   void searchProducts(String value) {
@@ -69,5 +75,9 @@ class HomeViewModel extends BaseViewModel {
     }
 
     notifyListeners();
+  }
+
+  Future<void> refreshProducts() async {
+    await getProducts();
   }
 }

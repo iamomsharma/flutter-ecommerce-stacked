@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myshop/ui/common/app_colors.dart';
 import 'package:myshop/ui/common/custom_search_bar.dart';
 import 'package:myshop/ui/common/product_card.dart';
 import 'package:stacked/stacked.dart';
@@ -11,7 +12,9 @@ class HomeView extends StackedView<HomeViewModel> {
   @override
   Widget builder(BuildContext context, HomeViewModel viewModel, Widget? child) {
     if (viewModel.isBusy) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
     }
 
     return Scaffold(
@@ -31,30 +34,32 @@ class HomeView extends StackedView<HomeViewModel> {
               ),
             ),
             Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: viewModel.filteredProducts.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 0.62,
-                ),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      viewModel.openProduct(viewModel.filteredProducts[index]);
-                    },
-                    child: ProductCard(
+              child: RefreshIndicator(
+                color: AppColors.primary,
+                onRefresh: () async {
+                  await viewModel.refreshProducts();
+                },
+                child: GridView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: viewModel.filteredProducts.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 0.62,
+                  ),
+                  itemBuilder: (context, index) {
+                    return ProductCard(
                       product: viewModel.filteredProducts[index],
                       onTap: () {
                         viewModel.openProductDetail(
                           viewModel.filteredProducts[index],
                         );
                       },
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ],

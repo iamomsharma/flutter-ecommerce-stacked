@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:myshop/models/product_model.dart';
+import 'package:myshop/ui/common/app_colors.dart';
 import 'package:stacked/stacked.dart';
 
 import 'product_detail_viewmodel.dart';
@@ -51,8 +52,9 @@ class ProductDetailView extends StackedView<ProductDetailViewModel> {
                 child: CachedNetworkImage(
                   imageUrl: product.image,
                   fit: BoxFit.contain,
-                  placeholder: (_, __) =>
-                      const Center(child: CircularProgressIndicator()),
+                  placeholder: (_, __) => const Center(
+                    child: CircularProgressIndicator(color: AppColors.primary),
+                  ),
                   errorWidget: (_, __, ___) =>
                       const Icon(Icons.broken_image, size: 80),
                 ),
@@ -119,14 +121,23 @@ class ProductDetailView extends StackedView<ProductDetailViewModel> {
 
             SizedBox(
               width: double.infinity,
+              height: 52,
               child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
                 onPressed: () {
                   viewModel.addToCart(product);
                 },
                 icon: const Icon(Icons.shopping_cart),
-                label: const Text("Add to Cart"),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                label: const Text(
+                  "Add to Cart",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ),

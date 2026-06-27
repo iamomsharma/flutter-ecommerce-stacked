@@ -31,6 +31,9 @@ class ProductDetailViewModel extends BaseViewModel {
 
     print("Product Added");
 
-    _snackbarService.showSnackbar(message: "Product added to cart");
+    _snackbarService.showSnackbar(
+      message: "Product added to cart",
+      duration: const Duration(seconds: 1),
+    );
   }
 }
